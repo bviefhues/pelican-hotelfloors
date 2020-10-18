@@ -1,0 +1,149 @@
+/* iOS Dark Mode colors:
+* Background               #000000
+* Secondary Background     #1c1c1e
+* System Blue              #0a84ff
+* Label                    #ffffff
+* Secondary label          #9e9fa6 
+* Tertiary label           #3d3e43
+* Indigo                   #5e5ce6
+*/
+
+/*
+ * Site
+ */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: Sans-Serif;
+    font-size: 100%;
+    background-color: #000000;
+    color: #ffffff;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+nav, footer {
+    padding: 1rem;
+    background-color: #1c1c1e;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+}
+
+h1, h2, h3, .sitesubtitle {
+    color: #9e9fa6;
+}
+
+.sitename {
+    font-size: 2rem;
+}
+
+.menu {
+    color: #9e9fa6;
+    align-self: end;
+}
+
+.menuitem {
+    font-size: 1.2rem;
+    padding-left: 1rem;
+}
+
+footer {
+    color: #9e9fa6;
+}
+
+main {
+    padding-top: 20px;
+}
+
+
+/*
+ * Index Pages
+ */
+
+.index-images {
+    display: grid;
+    grid-gap: 20px;
+}
+
+.index-image-container {
+    position: relative;
+    width: 300px;
+}
+
+.index-image-title {
+    position: absolute;
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    width: 100%;
+    transition: 0.5s ease;
+    opacity: 0;
+    padding: 1rem;
+    text-align: center;
+}
+
+.index-image-container:hover .index-image-title {
+    opacity: 1;
+}
+
+.index-image {
+    width: 300px;
+    height: auto;
+}
+
+/*
+ * Article Pages
+ */
+
+.article-image-container {
+    padding-bottom: 20px;
+}
+
+.article-image {
+    width: 100%;
+    height: auto;
+}
+
+
+/*
+ * Pages
+ */
+
+.page-container {
+    padding: 1rem;
+}
+
+
+/*
+ * Responsive
+ */
+
+@media (min-width: 620px) {
+    html {
+        max-width: 620px;
+    }
+
+    .index-images {
+        grid-template-columns: 300px 300px;
+    }
+}
+
+@media (min-width: 940px) {
+    html {
+        max-width: 940px;
+    }
+
+    .index-images {
+        grid-template-columns: 300px 300px 300px;
+    }
+}
+

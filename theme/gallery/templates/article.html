@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}{{ SITENAME }} - {{ article.title }}{% endblock %}
+
+{% block content %}
+
+<div class="article-image-container">
+    <h2>{{ article.title }}</h2>
+    <a href="{{ article.image }}">
+        <img class="article-image" src="{{ article.image_url }}" alt="{{ article.title }}">
+    </a>
+</div>
+
+{% endblock %}
