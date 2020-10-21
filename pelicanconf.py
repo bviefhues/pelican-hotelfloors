@@ -26,7 +26,7 @@ EXTRA_PATH_METADATA = {
 CURRENTYEAR = date.today().year
 
 PLUGIN_PATHS = ['../pelican-plugins', 'plugins']
-PLUGINS = ['jpeg_reader', 'exif_reader']
+PLUGINS = ['exif_reader']
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
