@@ -6,7 +6,7 @@ from datetime import date
 AUTHOR = 'Bernd Viefhues'
 SITENAME = 'Hotelfloors'
 SITESUBTITLE = "Corridors, Hallways and Staircases"
-SITEURL = ''
+SITEURL = 'https://hotelfloors.net'
 
 PATH = 'content'
 
@@ -26,7 +26,21 @@ EXTRA_PATH_METADATA = {
 CURRENTYEAR = date.today().year
 
 PLUGIN_PATHS = ['../pelican-plugins', 'plugins']
-PLUGINS = ['exif_reader']
+PLUGINS = ['exif_reader', 'sitemap']
+
+SITEMAP = {
+    "format": "xml",
+    "priorities": {
+        "articles": 0.5,
+        "indexes": 0.5,
+        "pages": 0.5
+    },
+    "changefreqs": {
+        "articles": "monthly",
+        "indexes": "daily",
+        "pages": "monthly"
+    }
+}
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
