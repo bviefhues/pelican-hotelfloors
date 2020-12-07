@@ -1,3 +1,30 @@
+"""
+This is a Pelican plugin for reading (JPEG) images as articles. Features:
+    - Process *.jpeg and *.jpg files in the content directory tree
+    - Extract EXIF information and map to Pelican metadata
+    - Replace simple German umlauts encoding (e.g. "u -> ue) with HTML and ASCII representation
+      (Since EXIF allows ASCII only)
+    - Generate a thumbnail image
+    - Inject the image and its thumbnail into Pelican's static file processing, including
+      copying to output
+
+Currently supported mapping:
+
+EXIF               Pelican Metadata
+----------------------------------------
+ImageDescription   title, slug
+Artist             author
+DateTimeOriginal   date
+UserComment        summary, description
+
+TODO
+- Support tags
+- Support categories
+- Smarter summary formatting (cut on word boundaries, ellipsis)
+- Config option to specify content sub-tree
+- Config option to write thumbs to a cache directory, instead of next to input file
+- Config option for thumb size
+"""
 import logging
 import os
 import datetime
@@ -83,7 +110,7 @@ class ExifReader(BaseReader):
         def file_newer(filename, other_filename):
             return os.path.getmtime(filename) > os.path.getmtime(other_filename)
 
-        # generate thumbnail
+        # generate thumbnail, skip if already there
         filename, ext = os.path.splitext(source_path)
         thumb_save_as = filename + '.thumb'
         if os.path.isfile(thumb_save_as) and file_newer(thumb_save_as, source_path):
@@ -97,44 +124,53 @@ class ExifReader(BaseReader):
 
 
 def exif_static_content(generator):
+    """
+    Inject static files into Pelican's static file processing
+    Must be connected through signals.static_generator_finalized.connect() to get data at the right time
+    into Pelican's processing
+    """
     for article in generator.context['articles']:
         if 'exif' not in article.metadata:
-            continue
+            continue #  this article was not processed by ExifReader
 
         logger.info(f'Registering static content for Relative Source Path: {article.relative_source_path}')
         
         source_name, ext = os.path.splitext(article.relative_source_path)
         
-        if ext.lower() == '.jpg':
-            ext = '.jpeg'
-        if ext.lower() == '.jpeg' and ext != '.jpeg':
-            ext = '.jpeg'
+        if ext.lower() == '.jpg' or ext.lower() == '.jpeg':
+            ext = '.jpeg' # normalize all JPEG images to same extension
         
+        # Hack to generate image and thumb URL and save_as from article
+        # Pelican generates a HTML article and adds a .html extension
+        # We strip the extension and add our own, to output image and thumb
+        # next to the HTML file
         if article.url.endswith('.html'):
             image_url = article.url[:-5] + ext
             image_save_as = article.save_as[:-5] + ext
             thumb_url = article.url[:-5] + '.thumb' + ext
             thumb_save_as = article.save_as[:-5] + '.thumb' + ext
         else:
-            image_url = article.url + image_ext 
-            image_save_as = article.save_as + image_ext
-            thumb_url = article.url + '.thumb' + image_ext 
-            thumb_save_as = article.save_as + '.thumb' + image_ext
+            logger.warn(f'Do not know how to process article URL {article.url}, skipping')
+            continue
         logger.info(f'Image URL: {image_url}, Thumb URL: {thumb_url}')
 
+        # Append image to Pelican static files context
         image_metadata = dict(article.metadata)
         image_metadata['url'] = image_url
         image_metadata['save_as'] = image_save_as
         image = Static('', metadata=image_metadata, source_path=article.relative_source_path, context=generator.context)
         generator.context['staticfiles'].append(image) 
+        # add URL to article metadata, so we can access it later in the jinja template
         article.metadata['image_url'] = image_url
         setattr(article, 'image_url', image_url)
 
+        # Append thumb to Pelican static files context
         thumb_metadata = dict(article.metadata)
         thumb_metadata['url'] = thumb_url
         thumb_metadata['save_as'] = thumb_save_as
         thumb = Static('', metadata=thumb_metadata, source_path=source_name+'.thumb', context=generator.context)
         generator.context['staticfiles'].append(thumb) 
+        # add URL to article metadata, so we can access it later in the jinja template
         article.metadata['thumb_url'] = thumb_url
         setattr(article, 'thumb_url', thumb_url)
 
@@ -142,11 +178,6 @@ def exif_static_content(generator):
 def add_reader(readers):
     readers.reader_classes['exif_reader'] = ExifReader
 
-def get_generator(pelican_object):
-    return ExifGenerator
-
 def register():
     signals.readers_init.connect(add_reader)
-    #signals.get_generators.connect(get_generator)
-    #signals.article_generator_finalized.connect(exif_static_content)
     signals.static_generator_finalized.connect(exif_static_content)
