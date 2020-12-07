@@ -2,7 +2,7 @@
 This is a Pelican plugin for reading (JPEG) images as articles. Features:
     - Process *.jpeg and *.jpg files in the content directory tree
     - Extract EXIF information and map to Pelican metadata
-    - Replace simple German umlauts encoding (e.g. "u -> ue) with HTML and ASCII representation
+    - Replace simple LaTeX style German umlauts encoding (e.g. "u -> ue) with HTML and ASCII representation
       (Since EXIF allows ASCII only)
     - Generate a thumbnail image
     - Inject the image and its thumbnail into Pelican's static file processing, including
