@@ -85,7 +85,7 @@ class ExifReader(BaseReader):
         if len(date_string):
             date = datetime.datetime.strptime(date_string, "%Y:%m:%d %H:%M:%S")
         else:
-            date = datetime.datetime.now()
+            date = datetime.datetime.fromtimestamp(os.path.getmtime(source_path)) # if no EXIF date use the file date
         slug = URLWrapper(expand_umlauts_ascii(title), self.settings).slug
         description = exif_tags.get('UserComment', '')
         summary = description[:140]
@@ -107,6 +107,8 @@ class ExifReader(BaseReader):
                 'exif': exif_tags,
         }
         
+        # pprint.pprint(metadata)
+
         def file_newer(filename, other_filename):
             return os.path.getmtime(filename) > os.path.getmtime(other_filename)
 
