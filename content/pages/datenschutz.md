@@ -1,4 +1,5 @@
 Title: Datenschutzerklärung
+Meta_robots: noindex
 
 
 Diese Website speichert keine personenbezogenen Daten. Von allen Zugriffen auf die Seite werden ausschließlich die folgenden Daten protokolliert: 
