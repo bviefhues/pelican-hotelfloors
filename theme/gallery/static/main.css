@@ -1,12 +1,52 @@
-/* iOS Dark Mode colors:
-* Background               #000000
-* Secondary Background     #1c1c1e
-* System Blue              #0a84ff
-* Label                    #ffffff
-* Secondary label          #9e9fa6 
-* Tertiary label           #3d3e43
-* Indigo                   #5e5ce6
-*/
+
+/*
+ * Colors
+ */
+:root {
+    /*
+     * Nord color palette https://www.nordtheme.com/
+     */
+
+    /* Base component color of "Polar Night".           Styleguide Nord - Polar Night */
+    --nord0: #2e3440;
+    /* Lighter shade color of the base component color. Styleguide Nord - Polar Night */
+    --nord1: #3b4252;
+    /* Lighter shade color of the base component color. Styleguide Nord - Polar Night */
+    --nord2: #434c5e;
+    /* Lighter shade color of the base component color. Styleguide Nord - Polar Night */
+    --nord3: #4c566a;
+    /* Base component color of "Snow Storm".            Styleguide Nord - Snow Storm */
+    --nord4: #d8dee9;
+    /* Lighter shade color of the base component color. Styleguide Nord - Snow Storm */
+    --nord5: #e5e9f0;
+    /* Lighter shade color of the base component color. Styleguide Nord - Snow Storm */
+    --nord6: #eceff4;
+    /* Bluish core color.                               Styleguide Nord - Frost */
+    --nord7: #8fbcbb;
+    /* Bluish core accent color.                        Styleguide Nord - Frost */
+    --nord8: #88c0d0;
+    /* Bluish core color.                               Styleguide Nord - Frost */
+    --nord9: #81a1c1;
+    /* Bluish core color.                               Styleguide Nord - Frost */
+    --nord10: #5e81ac;
+    /* Colorful component color.                        Styleguide Nord - Aurora */
+    --nord11: #bf616a;
+    /* Colorful component color.                        Styleguide Nord - Aurora */
+    --nord12: #d08770;
+    /* Colorful component color.                        Styleguide Nord - Aurora */
+    --nord13: #ebcb8b;
+    /* Colorful component color.                        Styleguide Nord - Aurora */
+    --nord14: #a3be8c;
+    /* Colorful component color.                        Styleguide Nord - Aurora */
+    --nord15: #b48ead;
+
+    --color-background: var(--nord0);
+    --color-background-elevated: var(--nord1);
+    --color-text: var(--nord4);
+    --color-heading: var(--nord6);
+    --color-button: var(--nord7);
+    --color-hover: var(--nord10);
+}
 
 /*
  * Site
@@ -19,8 +59,8 @@
 html {
     font-family: Sans-Serif;
     font-size: 100%;
-    background-color: #000000;
-    color: #ffffff;
+    background-color: var(--color-background);
+    color: var(--color-text);
     max-width: 300px;
     margin: 0 auto;
 }
@@ -30,15 +70,19 @@ a {
     text-decoration: inherit;
 }
 
+a:hover, button:hover {
+    color: var(--color-hover);
+}
+
 nav, footer {
     padding: 1rem;
-    background-color: #1c1c1e;
+    background-color: var(--color-background-elevated);
     display: grid;
     grid-template-columns: auto 1fr auto;
 }
 
 h1, h2, h3, .sitesubtitle {
-    color: #9e9fa6;
+    color: var(--color-heading);
 }
 
 .sitename {
@@ -46,7 +90,7 @@ h1, h2, h3, .sitesubtitle {
 }
 
 .menu {
-    color: #9e9fa6;
+    color: var(--color-heading);
     align-self: end;
 }
 
@@ -56,7 +100,7 @@ h1, h2, h3, .sitesubtitle {
 }
 
 footer {
-    color: #9e9fa6;
+    color: var(--color-text);
 }
 
 main {
@@ -83,7 +127,7 @@ main {
     bottom: 0;
     background: rgb(0, 0, 0);
     background: rgba(0, 0, 0, 0.5);
-    color: white;
+    color: var(--color-text);
     width: 100%;
     transition: 0.5s ease;
     opacity: 0;
@@ -103,6 +147,7 @@ main {
 .paginator {
     padding-top: 1rem;
     padding-bottom: 1rem;
+    width: -moz-fit-content;
     width: fit-content;
     margin: 0 auto;
 }
@@ -118,8 +163,8 @@ main {
 .paginator-button {
     display: inline-block;
     width: 50px;
-    background-color: #9e9fa6;
-    color: #1c1c1e;
+    background-color: var(--color-button);
+    color: var(--color-text);
     text-align: center;
     border: none;
     margin: 0;
@@ -130,8 +175,8 @@ main {
 
 .paginator-text {
     display: inline-block;
-    width: 200px;
-    color: #9e9fa6;
+    width: 180px;
+    color: var(--color-text);
     text-align: center;
     border: none;
     margin: 0;
