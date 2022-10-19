@@ -80,6 +80,10 @@ class ExifReader(BaseReader):
         exif_raw = img._getexif()
         exif_tags = {TAGS.get(tag): value for tag, value in exif_raw.items()}
         title = exif_tags.get('ImageDescription', os.path.basename(source_path))
+        try:
+            title = title.decode()
+        except (UnicodeDecodeError, AttributeError):
+            pass
         author = Author(exif_tags.get('Artist', 'Unknown'), self.settings)
         date_string = exif_tags.get('DateTimeOriginal', '')
         if len(date_string):
@@ -88,15 +92,26 @@ class ExifReader(BaseReader):
             date = datetime.datetime.fromtimestamp(os.path.getmtime(source_path)) # if no EXIF date use the file date
         slug = URLWrapper(expand_umlauts_ascii(title), self.settings).slug
         description = exif_tags.get('UserComment', '')
+        try:
+            description = description.decode()
+        except (UnicodeDecodeError, AttributeError):
+            pass
         summary = description[:140]
         tags = list()
+        title_split = title.split(", ")
+        if len(title_split) == 3:
+            # assumption: <hoten name>, <city>, <country>
+            category = title_split[1]
+        else:
+            category = "Unknown"
+            raise Exception("Unknown for " + title)
 
         metadata = {
                 # Pelican reserved keys
                 'title': expand_umlauts_html(title), 
                 'date': date, 
                 'tags': tags,
-                # 'category': None,
+                'category': expand_umlauts_html(category),
                 'slug': slug,
                 'author': author,
                 'summary': expand_umlauts_html(summary),
@@ -121,6 +136,11 @@ class ExifReader(BaseReader):
             logger.debug(f'Generating thumb for {source_path}')
             img.thumbnail(ExifReader.thumb_size)
             img.save(thumb_save_as, 'JPEG') # .thumb extension to mark as generated
+    
+        #parsed = {}
+        #for key, value in metadata.items():
+        #    parsed[key] = self.process_metadata(key, value)
+        metadata["category"] = self.process_metadata("category", metadata["category"])
 
         return description, metadata
 

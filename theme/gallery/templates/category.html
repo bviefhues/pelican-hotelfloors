@@ -1,8 +1,20 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
+{% block content %}
 
-{% block title %}{{ SITENAME }} - {{ category }} category{% endblock %}
+<div class="index-images">
+    {% for article in articles_page.object_list %}
+        <div class="index-image-container">
+            <a href="{{ SITEURL }}/{{ article.url }}" title="{{ article.title }}">
+                <img class="index-image" src="../{{ article.thumb_url }}" alt="{{ article.title }}">
+                <div class="index-image-title">{{ article.title }}</div>
+            </a>
+        </div>
+    {% endfor %}
+</div>
 
-{% block content_title %}
-<h2>Articles in the {{ category }} category</h2>
-{% endblock %}
+{% if articles_page.has_other_pages() %}
+    {% include 'pagination.html' %}
+{% endif %}
+
+{% endblock content %}
 
